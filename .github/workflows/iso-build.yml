@@ -32,7 +32,7 @@ jobs:
       - name: Build
         shell: bash 
         run: |
-          sudo mkarchiso -v archiso
+          # sudo mkarchiso -v archiso
           
           ls -lh
           
