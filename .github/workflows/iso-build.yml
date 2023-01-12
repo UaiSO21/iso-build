@@ -26,13 +26,13 @@ jobs:
           Include = /etc/pacman.d/chaotic-mirrorlist" | tee -a /etc/pacman.conf
           
           echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-          pacman -Syu --noconfirm --needed archiso
+          pacman -Syu --noconfirm --needed archiso sudo
           pacman -Scc --noconfirm
       
       - name: Build
         shell: bash -O extglob {0}
         run: |
-          mkarchiso -v archiso
+          sudo mkarchiso -v archiso
           
           ls -lh
           
