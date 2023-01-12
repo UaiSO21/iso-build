@@ -1,0 +1,87 @@
+name: ISO Build
+
+on:
+  # repository_dispatch:
+    # types:
+    #   - '*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        shell: bash -O extglob {0}
+        run: |
+          #add ChaoticAUR
+          pacman-key --init
+          pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
+          pacman-key --lsign-key FBA220DFC880C036
+          pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
+          echo "
+          [chaotic-aur]
+          Include = /etc/pacman.d/chaotic-mirrorlist" | tee -a /etc/pacman.conf
+          
+          echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+          pacman -Syu --noconfirm --needed archiso
+          pacman -Scc --noconfirm
+      
+      - name: Build
+        shell: bash -O extglob {0}
+        run: |
+          mkarchiso -v archiso
+          
+          ls -lh
+          
+#       - name: CheckSum
+#         shell: bash -O extglob {0}
+#         run: |
+#           # "Checksum"
+#           cd x86_64
+#           echo '#!/bin/bash
+#           for i in $(ls *.zst); do md5sum $i >> $i.md5; done
+#           for i in $(ls *.sig | sed 's/.sig//'); do md5sum $i.sig >> $i.md5; done
+#           exit 0' > md5.sh
+#           bash md5.sh
+#           rm md5.sh
+#           
+#       - name: Push to Repo
+#         shell: bash
+#         run: |
+#           echo "## ssh setup ##"
+#           mkdir -p /home/runner/.ssh
+#           touch /home/runner/.ssh/id_rsa
+#           chmod 600 /home/runner/.ssh/id_rsa
+#           ssh-agent -a /tmp/ssh_agent.sock > /dev/null
+#           echo "${{ secrets.REPO_SSH_KEY }}" >> /home/runner/.ssh/id_rsa
+#           eval `ssh-agent -s`
+#           ssh-add /home/runner/.ssh/id_rsa
+#           ssh-keyscan -t rsa -p ${{ secrets.REPO_PORT }} ${{ secrets.REPO_HOST }} >> /home/runner/.ssh/known_hosts
+#           
+#           # cd x86_64
+#           ls -lh x86_64
+#           
+#           #select branch
+#           if [ -n "$(echo ${{ github.event.client_payload.branch }} | grep stable )" ];then
+#             branch=stable
+#           elif [ -n "$(echo ${{ github.event.client_payload.branch }} | grep testing )" ];then
+#             branch=testing
+#           else
+#             branch=dev
+#           fi
+#           
+#           mv x86_64 $branch
+#           rsync -vapzO -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.REPO_PORT }}" $branch ${{ secrets.REPO_USER }}@${{ secrets.REPO_HOST }}:${{ secrets.REPO_DIR_PACKAGE }}
+
+          
+      # # Tmate ##
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      
+      # - name: Telegram Alert Fail
+      #   if: ${{ failure() || cancelled() }}
+      #   run: |
+      #     curl -X POST -H 'Content-Type: application/json' -d '{"chat_id": "${{ secrets.CHAT_ID }}", "text": "FALHA ao criar Pacote: ${{ github.event.action }} a partir do branch ${{ github.ref_name }}, link do erro: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}", "disable_notification": false}' ${{ secrets.MESSAGE_BOT_KEY }}
