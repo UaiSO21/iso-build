@@ -18,10 +18,19 @@ jobs:
       - name: Install Dependencies
         shell: bash -O extglob {0}
         run: |
-          #add ChaoticAUR
+          #add ChaoticAUR key
           pacman-key --init
           pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
           pacman-key --lsign-key FBA220DFC880C036
+          
+          #add BigLinux key
+          sudo pacman-key -r 45EC44879815E2A6
+          sudo pacman-key --lsign-key 45EC44879815E2A6
+          
+          #add UaiSO21 key
+          sudo pacman-key -r FB39C5D54771F074
+          sudo pacman-key --lsign-key FB39C5D54771F074
+          
           pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
           echo "
           [chaotic-aur]
