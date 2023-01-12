@@ -10,6 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container: archlinux:latest
+      options: --privileged
 
     steps:
       - uses: actions/checkout@v2
@@ -26,7 +27,24 @@ jobs:
           Include = /etc/pacman.d/chaotic-mirrorlist" | tee -a /etc/pacman.conf
           
           echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-          pacman -Syu --noconfirm --needed archiso sudo
+          pacman -Syu --noconfirm --needed archiso \
+          sudo \
+          arch-install-scripts \
+          awk \
+          dosfstools \
+          e2fsprogs \
+          erofs-utils \
+          findutils \
+          grub \
+          gzip \
+          libarchive \
+          libisoburn \
+          mtools \
+          openssl \
+          pacman \
+          sed \
+          squashfs-tools
+
           pacman -Scc --noconfirm
       
       - name: Build
