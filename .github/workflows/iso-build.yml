@@ -30,7 +30,7 @@ jobs:
           pacman -Scc --noconfirm
       
       - name: Build
-        shell: bash -O extglob {0}
+        shell: bash 
         run: |
           sudo mkarchiso -v archiso
           
@@ -77,9 +77,9 @@ jobs:
 #           rsync -vapzO -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.REPO_PORT }}" $branch ${{ secrets.REPO_USER }}@${{ secrets.REPO_HOST }}:${{ secrets.REPO_DIR_PACKAGE }}
 
           
-      # # Tmate ##
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
+      # Tmate ##
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       
       # - name: Telegram Alert Fail
       #   if: ${{ failure() || cancelled() }}
