@@ -14,8 +14,8 @@ bootmodes=('bios.syslinux.mbr' 'bios.syslinux.eltorito'
 arch="x86_64"
 pacman_conf="pacman.conf"
 airootfs_image_type="squashfs"
-airootfs_image_tool_options=('-Xbcj' 'x86' '-b' '1M' '-Xdict-size' '1M')
-#'-comp' 'xz'
+airootfs_image_tool_options=('-comp' 'gzip' '-Xcompression-level,1')
+# airootfs_image_tool_options=('-comp' 'xz' '-Xbcj' 'x86' '-b' '1M' '-Xdict-size' '1M')
 file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/root"]="0:0:750"
