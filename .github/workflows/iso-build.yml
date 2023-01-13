@@ -35,10 +35,10 @@ jobs:
           # SigLevel = PackageRequired
           # Server = http://repo-uaiso.uai21.com/dev/$arch' | tee -a /etc/pacman.conf
           
-          cp archiso/pacman.conf /etc/pacman.conf
-          
           pacman -Syu --noconfirm --needed archiso sudo 
           pacman -Scc --noconfirm
+          
+          cp archiso/pacman.conf /etc/pacman.conf
       
 #       - name: Build
 #         shell: bash 
