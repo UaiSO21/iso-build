@@ -39,7 +39,10 @@ jobs:
           
           # echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           
-          cat /etc/pacman.conf
+          echo '
+          [uaiso21-dev]
+          SigLevel = PackageRequired
+          Server = http://repo-uaiso.uai21.com/dev/$arch' | tee -a /etc/pacman.conf
           
           pacman -Syu --noconfirm --needed archiso \
           sudo \
