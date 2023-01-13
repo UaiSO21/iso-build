@@ -38,7 +38,7 @@ jobs:
           pacman -Syu --noconfirm --needed archiso sudo 
           pacman -Scc --noconfirm
           
-          cp archiso/pacman.conf /etc/pacman.conf
+          # cp archiso/pacman.conf /etc/pacman.conf
       
 #       - name: Build
 #         shell: bash 
