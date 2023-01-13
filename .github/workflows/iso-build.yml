@@ -72,7 +72,7 @@ jobs:
           ssh-add /home/runner/.ssh/id_rsa
           ssh-keyscan -t rsa -p ${{ secrets.REPO_PORT }} ${{ secrets.REPO_HOST }} >> /home/runner/.ssh/known_hosts
           
-          # cd out
+          cd out
           ls -lh
           
           for i in *.iso *.md5; do
