@@ -35,7 +35,7 @@ jobs:
           # SigLevel = PackageRequired
           # Server = http://repo-uaiso.uai21.com/dev/$arch' | tee -a /etc/pacman.conf
           
-          pacman -Syu --noconfirm --needed archiso sudo nano
+          pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync
           pacman -Scc --noconfirm
           
           # cp archiso/pacman.conf /etc/pacman.conf
