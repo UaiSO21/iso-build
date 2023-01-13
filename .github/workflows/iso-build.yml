@@ -58,49 +58,49 @@ jobs:
 
           pacman -Scc --noconfirm
       
-      - name: Build
-        shell: bash 
-        run: |
-          mkarchiso -v archiso
-          
-          cd out
-          ls -lh
-          
-      - name: CheckSum
-        shell: bash -O extglob {0}
-        run: |
-          # "Checksum"
-          cd out
-          echo '#!/bin/bash
-          for i in *.iso; do md5sum $i >> $i.md5; done
-          exit 0' > md5.sh
-          bash md5.sh
-          rm md5.sh
-          
-      - name: Push to Repo
-        shell: bash
-        run: |
-          echo "## ssh setup ##"
-          mkdir -p /home/runner/.ssh
-          touch /home/runner/.ssh/id_rsa
-          chmod 600 /home/runner/.ssh/id_rsa
-          ssh-agent -a /tmp/ssh_agent.sock > /dev/null
-          echo "${{ secrets.REPO_SSH_KEY }}" >> /home/runner/.ssh/id_rsa
-          eval `ssh-agent -s`
-          ssh-add /home/runner/.ssh/id_rsa
-          ssh-keyscan -t rsa -p ${{ secrets.REPO_PORT }} ${{ secrets.REPO_HOST }} >> /home/runner/.ssh/known_hosts
-          
-          # cd out
-          ls -lh
-          
-          for i in *.iso *.md5; do
-            rsync -vapzO -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.REPO_PORT }}" $i ${{ secrets.REPO_USER }}@${{ secrets.REPO_HOST }}:${{ secrets.REPO_DIR_ISO }}
-          done
+#       - name: Build
+#         shell: bash 
+#         run: |
+#           mkarchiso -v archiso
+#           
+#           cd out
+#           ls -lh
+#           
+#       - name: CheckSum
+#         shell: bash -O extglob {0}
+#         run: |
+#           # "Checksum"
+#           cd out
+#           echo '#!/bin/bash
+#           for i in *.iso; do md5sum $i >> $i.md5; done
+#           exit 0' > md5.sh
+#           bash md5.sh
+#           rm md5.sh
+#           
+#       - name: Push to Repo
+#         shell: bash
+#         run: |
+#           echo "## ssh setup ##"
+#           mkdir -p /home/runner/.ssh
+#           touch /home/runner/.ssh/id_rsa
+#           chmod 600 /home/runner/.ssh/id_rsa
+#           ssh-agent -a /tmp/ssh_agent.sock > /dev/null
+#           echo "${{ secrets.REPO_SSH_KEY }}" >> /home/runner/.ssh/id_rsa
+#           eval `ssh-agent -s`
+#           ssh-add /home/runner/.ssh/id_rsa
+#           ssh-keyscan -t rsa -p ${{ secrets.REPO_PORT }} ${{ secrets.REPO_HOST }} >> /home/runner/.ssh/known_hosts
+#           
+#           # cd out
+#           ls -lh
+#           
+#           for i in *.iso *.md5; do
+#             rsync -vapzO -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.REPO_PORT }}" $i ${{ secrets.REPO_USER }}@${{ secrets.REPO_HOST }}:${{ secrets.REPO_DIR_ISO }}
+#           done
 
           
-      # # Tmate ##
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
+      # Tmate ##
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       
       # - name: Telegram Alert Fail
       #   if: ${{ failure() || cancelled() }}
