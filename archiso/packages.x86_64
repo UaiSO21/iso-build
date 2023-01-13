@@ -126,74 +126,74 @@ wireless-regdb
 wireless_tools
 wpa_supplicant
 zsh
-# 
-# #CUSTOMIZAÇÃO
-# #=======================
-# 
-# #COMPLEMENTO
-# neofetch
-# bash-completion
-# os-prober
-# dex
-# libxinerama
-# make
-# mkinitcpio-openswap
-# curl
-# wget
-# 
-# #KERNEL
-# linux
-# linux-headers
-# 
-# ##CALAMARES
-# alci-calamares
-# alci-calamares-config
-# 
-# #XORG
-# xorg-server
-# xorg-apps
-# xorg-xkill
-# xterm
-# xorg-xrdb
-# 
-# #WAYLAND
-# qt6-wayland
-# 
-# ##DESKTOP
-# sddm
-# plasma-meta
-# dolphin
-# konsole
-# yakuake
-# spectacle
-# packagekit-qt5
-# packagekit-qt6
-# kscreen
-# kfind
-# mlocate
-# kcalc
-# simplescreenrecorder
-# lib32-simplescreenrecorder
-# okular
-# 
-# ##FONTES
-# ttf-lato
-# noto-fonts-emoji
-# noto-fonts-cjk
-# 
-# ##REDE
-# networkmanager
-# network-manager-applet
-# networkmanager-pptp
-# mtr
-# speedtest-cli
-# 
-# #REPOSITORIOS
-# #chaotic-mirrorlist
-# #chaotic-keyring
-# biglinux-key
-# 
-# #BIGLINUX
-# biglinux-apps-rename
-# biglinux-webapps
-# bigbashview
+
+#CUSTOMIZAÇÃO
+#=======================
+
+#COMPLEMENTO
+neofetch
+bash-completion
+os-prober
+dex
+libxinerama
+make
+mkinitcpio-openswap
+curl
+wget
+
+#KERNEL
+linux
+linux-headers
+
+##CALAMARES
+alci-calamares
+alci-calamares-config
+
+#XORG
+xorg-server
+xorg-apps
+xorg-xkill
+xterm
+xorg-xrdb
+
+#WAYLAND
+qt6-wayland
+
+##DESKTOP
+sddm
+plasma-meta
+dolphin
+konsole
+yakuake
+spectacle
+packagekit-qt5
+packagekit-qt6
+kscreen
+kfind
+mlocate
+kcalc
+simplescreenrecorder
+lib32-simplescreenrecorder
+okular
+
+##FONTES
+ttf-lato
+noto-fonts-emoji
+noto-fonts-cjk
+
+##REDE
+networkmanager
+network-manager-applet
+networkmanager-pptp
+mtr
+speedtest-cli
+
+#REPOSITORIOS
+#chaotic-mirrorlist
+#chaotic-keyring
+biglinux-key
+
+#BIGLINUX
+biglinux-apps-rename
+biglinux-webapps
+bigbashview
