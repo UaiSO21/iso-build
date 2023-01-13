@@ -18,10 +18,10 @@ jobs:
       - name: Install Dependencies
         shell: bash -O extglob {0}
         run: |
-          #add ChaoticAUR key
-          pacman-key --init
-          pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
-          pacman-key --lsign-key FBA220DFC880C036
+          # #add ChaoticAUR key
+          # pacman-key --init
+          # pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
+          # pacman-key --lsign-key FBA220DFC880C036
           
           echo "#add BigLinux key"
           pacman-key -r 45EC44879815E2A6
@@ -31,10 +31,10 @@ jobs:
           pacman-key -r FB39C5D54771F074
           pacman-key --lsign-key FB39C5D54771F074
           
-          pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
-          echo "
-          [chaotic-aur]
-          Include = /etc/pacman.d/chaotic-mirrorlist" | tee -a /etc/pacman.conf
+          # pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
+          # echo "
+          # [chaotic-aur]
+          # Include = /etc/pacman.d/chaotic-mirrorlist" | tee -a /etc/pacman.conf
           
           echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           pacman -Syu --noconfirm --needed archiso \
