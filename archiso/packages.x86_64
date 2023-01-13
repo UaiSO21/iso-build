@@ -189,8 +189,8 @@ mtr
 speedtest-cli
 
 #REPOSITORIOS
-chaotic-mirrorlist
-chaotic-keyring
+#chaotic-mirrorlist
+#chaotic-keyring
 biglinux-key
 
 #BIGLINUX
