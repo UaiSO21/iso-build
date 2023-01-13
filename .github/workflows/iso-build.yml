@@ -20,48 +20,24 @@ jobs:
         run: |
           pacman-key --init
           
-          # #add ChaoticAUR key
-          # pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
-          # pacman-key --lsign-key FBA220DFC880C036
+          # #add BigLinux key
+          # pacman-key -r 45EC44879815E2A6
+          # pacman-key --lsign-key 45EC44879815E2A6
           
-          #add BigLinux key
-          pacman-key -r 45EC44879815E2A6
-          pacman-key --lsign-key 45EC44879815E2A6
+          # echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           
           #add UaiSO21 key
           pacman-key -r FB39C5D54771F074
           pacman-key --lsign-key FB39C5D54771F074
           
-          # pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
-          # echo "
-          # [chaotic-aur]
-          # Include = /etc/pacman.d/chaotic-mirrorlist" | tee -a /etc/pacman.conf
+          # echo '
+          # [uaiso21-dev]
+          # SigLevel = PackageRequired
+          # Server = http://repo-uaiso.uai21.com/dev/$arch' | tee -a /etc/pacman.conf
           
-          echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+          cp archiso/pacman.conf /etc/pacman.conf
           
-          echo '
-          [uaiso21-dev]
-          SigLevel = PackageRequired
-          Server = http://repo-uaiso.uai21.com/dev/$arch' | tee -a /etc/pacman.conf
-          
-          pacman -Syu --noconfirm --needed archiso \
-          sudo \
-          arch-install-scripts \
-          awk \
-          dosfstools \
-          e2fsprogs \
-          erofs-utils \
-          findutils \
-          grub \
-          gzip \
-          libarchive \
-          libisoburn \
-          mtools \
-          openssl \
-          pacman \
-          sed \
-          squashfs-tools
-
+          pacman -Syu --noconfirm --needed archiso sudo 
           pacman -Scc --noconfirm
       
 #       - name: Build
