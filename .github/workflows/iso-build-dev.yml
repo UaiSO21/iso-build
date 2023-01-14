@@ -57,7 +57,7 @@ jobs:
           mkdir -p /home/runner/.ssh
           touch /home/runner/.ssh/id_rsa
           chmod 600 /home/runner/.ssh/id_rsa
-          ssh-agent -a /tmp/ssh_agent.sock > /dev/null
+          # ssh-agent -a /tmp/ssh_agent.sock > /dev/null
           echo "${{ secrets.REPO_SSH_KEY }}" >> /home/runner/.ssh/id_rsa
           eval `ssh-agent -s`
           ssh-add /home/runner/.ssh/id_rsa
