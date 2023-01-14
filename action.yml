@@ -1,0 +1,52 @@
+name: 'UaiSO21 Iso Action'
+
+inputs:
+  branch: 
+    description: 'stable (default), testing, dev'
+    required: false
+    default: stable
+
+runs:
+  using: "composite"
+  steps:
+  
+    - id: install-build-dependencies
+      shell: bash
+      run: |
+        pacman-key --init
+        #add UaiSO21 key
+        pacman-key -r FB39C5D54771F074
+        pacman-key --lsign-key FB39C5D54771F074
+        pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync
+        pacman -Scc --noconfirm
+        
+    - name: ISO Build
+      shell: bash
+      run: |
+        echo "
+        [uaiso21-${{ inputs.branch }}]
+        SigLevel = PackageRequired
+        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a archiso/airootfs/etc/pacman.conf
+        
+        echo "
+        [uaiso21-${{ inputs.branch }}]
+        SigLevel = PackageRequired
+        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a archiso/pacman.conf
+        
+        if [ "${{ inputs.branch }}" != "stable" ];then
+          sed -i '/iso_version/s/"/-${{ inputs.branch }}/2' archiso/profiledef.sh
+          sed -i "/airootfs_image_tool_options/s/=.*/=('-comp' 'zstd' '-Xcompression-level' '1' '-b' '1M')/" archiso/profiledef.sh
+        fi
+        
+        mkarchiso -v archiso
+        
+    - name: CheckSum
+      shell: bash -O extglob {0}
+      run: |
+        # "Checksum"
+        cd out
+        echo '#!/bin/bash
+        for i in *.iso; do md5sum $i >> $i.md5; done
+        exit 0' > md5.sh
+        bash md5.sh
+        rm md5.sh

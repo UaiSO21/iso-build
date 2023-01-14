@@ -12,6 +12,10 @@ jobs:
     container: 
       image: archlinux:latest
       options: --privileged
+      
+    strategy:
+      matrix:
+        BRANCH: [stable, testing, dev]
 
     steps:
       - uses: actions/checkout@v3
@@ -26,9 +30,9 @@ jobs:
           
           # echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           
-          #add UaiSO21 key
-          pacman-key -r FB39C5D54771F074
-          pacman-key --lsign-key FB39C5D54771F074
+          # #add UaiSO21 key
+          # pacman-key -r FB39C5D54771F074
+          # pacman-key --lsign-key FB39C5D54771F074
           
           # echo '
           # [uaiso21-dev]
@@ -40,24 +44,10 @@ jobs:
           
           # cp archiso/pacman.conf /etc/pacman.conf
       
-      - name: Build
-        shell: bash 
-        run: |
-          mkarchiso -v archiso
-          
-          cd out
-          ls -lh
-          
-      - name: CheckSum
-        shell: bash -O extglob {0}
-        run: |
-          # "Checksum"
-          cd out
-          echo '#!/bin/bash
-          for i in *.iso; do md5sum $i >> $i.md5; done
-          exit 0' > md5.sh
-          bash md5.sh
-          rm md5.sh
+      - name: ISO Build
+        uses: UaiSO21/iso-build@main
+        with:
+          branch: ${{ matrix.branch }}
           
       - name: Push to Repo
         shell: bash
