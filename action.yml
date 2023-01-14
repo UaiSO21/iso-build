@@ -20,39 +20,39 @@ runs:
         pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync
         pacman -Scc --noconfirm
         
-    - name: ISO Build
-      shell: bash
-      run: |
-        echo "
-        [uaiso21-${{ inputs.branch }}]
-        SigLevel = PackageRequired
-        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a archiso/airootfs/etc/pacman.conf
-        
-        cat archiso/airootfs/etc/pacman.conf
-        
-        echo "
-        [uaiso21-${{ inputs.branch }}]
-        SigLevel = PackageRequired
-        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a archiso/pacman.conf
-        
-        cat archiso/pacman.conf
-        
-        if [ "${{ inputs.branch }}" != "stable" ];then
-          sed -i '/iso_version/s/"/-${{ inputs.branch }}/2' archiso/profiledef.sh
-          sed -i "/airootfs_image_tool_options/s/=.*/=('-comp' 'zstd' '-Xcompression-level' '1' '-b' '1M')/" archiso/profiledef.sh
-        fi
-        
-        cat archiso/profiledef.sh
-        
-        mkarchiso -v archiso
-        
-    - name: CheckSum
-      shell: bash -O extglob {0}
-      run: |
-        # "Checksum"
-        cd out
-        echo '#!/bin/bash
-        for i in *.iso; do md5sum $i >> $i.md5; done
-        exit 0' > md5.sh
-        bash md5.sh
-        rm md5.sh
+#     - name: ISO Build
+#       shell: bash
+#       run: |
+#         echo "
+#         [uaiso21-${{ inputs.branch }}]
+#         SigLevel = PackageRequired
+#         Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a archiso/airootfs/etc/pacman.conf
+#         
+#         cat archiso/airootfs/etc/pacman.conf
+#         
+#         echo "
+#         [uaiso21-${{ inputs.branch }}]
+#         SigLevel = PackageRequired
+#         Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a archiso/pacman.conf
+#         
+#         cat archiso/pacman.conf
+#         
+#         if [ "${{ inputs.branch }}" != "stable" ];then
+#           sed -i '/iso_version/s/"/-${{ inputs.branch }}/2' archiso/profiledef.sh
+#           sed -i "/airootfs_image_tool_options/s/=.*/=('-comp' 'zstd' '-Xcompression-level' '1' '-b' '1M')/" archiso/profiledef.sh
+#         fi
+#         
+#         cat archiso/profiledef.sh
+#         
+#         mkarchiso -v archiso
+#         
+#     - name: CheckSum
+#       shell: bash -O extglob {0}
+#       run: |
+#         # "Checksum"
+#         cd out
+#         echo '#!/bin/bash
+#         for i in *.iso; do md5sum $i >> $i.md5; done
+#         exit 0' > md5.sh
+#         bash md5.sh
+#         rm md5.sh
