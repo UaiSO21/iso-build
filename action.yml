@@ -20,7 +20,7 @@ runs:
         #add UaiSO21 key
         pacman-key -r FB39C5D54771F074
         pacman-key --lsign-key FB39C5D54771F074
-        pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync git
+        pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync git github-cli zip
         pacman -Scc --noconfirm
         
     - name: ISO Build
