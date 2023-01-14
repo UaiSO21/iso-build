@@ -81,14 +81,17 @@ runs:
         gh release create ${release} --title ${release} --repo ${{ github.repository }} --notes "automated release" || echo "release already exists"
 
         GITHUB_LINK=https://github.com/${GITHUB_REPOSITORY}/releases/download/${release}
+        
+        cd out
+        ISO=$(find . -type f -name "*.iso" | sed 's|.*/||')
 
-        if [[ -z "$(du --threshold=1950M ${{ steps.image-build.outputs.file-path }})" ]]; then
+        if [[ -z "$(du --threshold=1950M ${ISO})" ]]; then
           # iso is small enough to upload already
           gh release upload ${release} --repo ${{ github.repository }} --clobber \
             ${{ steps.upload-prepare.outputs.upload-files }}
         else
           # iso is too big - creating a split-zip
-          zip -j -s 1950m ${{ steps.image-build.outputs.file-path }}.zip ${{ steps.image-build.outputs.file-path }}
+          zip -j -s 1950m ${ISO}.zip ${ISO}
           
           REMOTE_FILES=$(find . -maxdepth 1 -name "*.z*" -exec basename {} \; | xargs -I{} echo "-w \"${GITHUB_LINK}/{}\"")
           gh release upload ${release} --repo ${{ github.repository }} --clobber \
