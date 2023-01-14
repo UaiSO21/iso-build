@@ -31,19 +31,19 @@ runs:
         echo "
         [uaiso21-${{ inputs.branch }}]
         SigLevel = PackageRequired
-        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a iso-profile/airootfs/etc/pacman.conf
+        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/'$arch'" | tee -a iso-profile/airootfs/etc/pacman.conf
         
         cat iso-profile/airootfs/etc/pacman.conf
         
         echo "
         [uaiso21-${{ inputs.branch }}]
         SigLevel = PackageRequired
-        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a iso-profile/pacman.conf
+        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/'$arch'" | tee -a iso-profile/pacman.conf
         
         cat iso-profile/pacman.conf
         
         if [ "${{ inputs.branch }}" != "stable" ];then
-          sed -i '/iso_version/s/"/-${{ inputs.branch }}/2' iso-profile/profiledef.sh
+          sed -i '/iso_version/s/"/-${{ inputs.branch }}"/2' iso-profile/profiledef.sh
           sed -i "/airootfs_image_tool_options/s/=.*/=('-comp' 'zstd' '-Xcompression-level' '1' '-b' '1M')/" iso-profile/profiledef.sh
         fi
         
