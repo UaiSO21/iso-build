@@ -28,15 +28,21 @@ runs:
         SigLevel = PackageRequired
         Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a archiso/airootfs/etc/pacman.conf
         
+        cat archiso/airootfs/etc/pacman.conf
+        
         echo "
         [uaiso21-${{ inputs.branch }}]
         SigLevel = PackageRequired
         Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a archiso/pacman.conf
         
+        cat archiso/pacman.conf
+        
         if [ "${{ inputs.branch }}" != "stable" ];then
           sed -i '/iso_version/s/"/-${{ inputs.branch }}/2' archiso/profiledef.sh
           sed -i "/airootfs_image_tool_options/s/=.*/=('-comp' 'zstd' '-Xcompression-level' '1' '-b' '1M')/" archiso/profiledef.sh
         fi
+        
+        cat archiso/profiledef.sh
         
         mkarchiso -v archiso
         
