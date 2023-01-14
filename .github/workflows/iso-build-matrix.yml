@@ -1,4 +1,4 @@
-name: ISO Build
+name: ISO Build Matrix
 
 on:
   # repository_dispatch:
@@ -48,6 +48,7 @@ jobs:
         uses: UaiSO21/iso-build@main
         with:
           branch: ${{ matrix.branch }}
+          iso-profile: 'https://github.com/UaiSO21/iso-profile'
           
       - name: Push to Repo
         shell: bash

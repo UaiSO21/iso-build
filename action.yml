@@ -5,6 +5,9 @@ inputs:
     description: 'stable (default), testing, dev'
     required: false
     default: stable
+  iso-profile:
+    description: 'iso profiles to clone'
+    required: true
 
 runs:
   using: "composite"
@@ -17,42 +20,44 @@ runs:
         #add UaiSO21 key
         pacman-key -r FB39C5D54771F074
         pacman-key --lsign-key FB39C5D54771F074
-        pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync
+        pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync git
         pacman -Scc --noconfirm
         
-#     - name: ISO Build
-#       shell: bash
-#       run: |
-#         echo "
-#         [uaiso21-${{ inputs.branch }}]
-#         SigLevel = PackageRequired
-#         Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a archiso/airootfs/etc/pacman.conf
-#         
-#         cat archiso/airootfs/etc/pacman.conf
-#         
-#         echo "
-#         [uaiso21-${{ inputs.branch }}]
-#         SigLevel = PackageRequired
-#         Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a archiso/pacman.conf
-#         
-#         cat archiso/pacman.conf
-#         
-#         if [ "${{ inputs.branch }}" != "stable" ];then
-#           sed -i '/iso_version/s/"/-${{ inputs.branch }}/2' archiso/profiledef.sh
-#           sed -i "/airootfs_image_tool_options/s/=.*/=('-comp' 'zstd' '-Xcompression-level' '1' '-b' '1M')/" archiso/profiledef.sh
-#         fi
-#         
-#         cat archiso/profiledef.sh
-#         
-#         mkarchiso -v archiso
-#         
-#     - name: CheckSum
-#       shell: bash -O extglob {0}
-#       run: |
-#         # "Checksum"
-#         cd out
-#         echo '#!/bin/bash
-#         for i in *.iso; do md5sum $i >> $i.md5; done
-#         exit 0' > md5.sh
-#         bash md5.sh
-#         rm md5.sh
+    - name: ISO Build
+      shell: bash
+      run: |
+        git clone ${{ inputs.iso-profile }} -l iso-profile
+        
+        echo "
+        [uaiso21-${{ inputs.branch }}]
+        SigLevel = PackageRequired
+        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a iso-profile/airootfs/etc/pacman.conf
+        
+        cat iso-profile/airootfs/etc/pacman.conf
+        
+        echo "
+        [uaiso21-${{ inputs.branch }}]
+        SigLevel = PackageRequired
+        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch" | tee -a iso-profile/pacman.conf
+        
+        cat iso-profile/pacman.conf
+        
+        if [ "${{ inputs.branch }}" != "stable" ];then
+          sed -i '/iso_version/s/"/-${{ inputs.branch }}/2' iso-profile/profiledef.sh
+          sed -i "/airootfs_image_tool_options/s/=.*/=('-comp' 'zstd' '-Xcompression-level' '1' '-b' '1M')/" iso-profile/profiledef.sh
+        fi
+        
+        cat iso-profile/profiledef.sh
+        
+        mkarchiso -v iso-profile
+        
+    - name: CheckSum
+      shell: bash -O extglob {0}
+      run: |
+        # "Checksum"
+        cd out
+        echo '#!/bin/bash
+        for i in *.iso; do md5sum $i >> $i.md5; done
+        exit 0' > md5.sh
+        bash md5.sh
+        rm md5.sh
