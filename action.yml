@@ -28,17 +28,17 @@ runs:
       run: |
         git clone ${{ inputs.iso-profile }} -l iso-profile
         
-        echo "
-        [uaiso21-${{ inputs.branch }}]
+        echo '
+        [uaiso21-'"${{ inputs.branch }}"']
         SigLevel = PackageRequired
-        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/'$arch'" | tee -a iso-profile/airootfs/etc/pacman.conf
+        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch' | tee -a iso-profile/airootfs/etc/pacman.conf
         
         cat iso-profile/airootfs/etc/pacman.conf
         
-        echo "
-        [uaiso21-${{ inputs.branch }}]
+        echo '
+        [uaiso21-'"${{ inputs.branch }}"']
         SigLevel = PackageRequired
-        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/'$arch'" | tee -a iso-profile/pacman.conf
+        Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch' | tee -a iso-profile/pacman.conf
         
         cat iso-profile/pacman.conf
         
