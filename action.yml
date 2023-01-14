@@ -61,3 +61,36 @@ runs:
         exit 0' > md5.sh
         bash md5.sh
         rm md5.sh
+    
+    - id: upload-prepare
+      shell: bash -O extglob {0}
+      run: |
+        echo "## ssh setup"
+        mkdir -p /home/runner/.ssh
+        touch /home/runner/.ssh/github_actions
+        chmod 600 /home/runner/.ssh/github_actions
+        ssh-agent -a /tmp/ssh_agent.sock > /dev/null
+        
+    - id: upload-github-release
+      shell: bash -O extglob {0}
+      run: |
+        echo "## github upload"
+        release=$(date +%Y-%m-%d)
+
+        echo ${{ github.token }} | gh auth login --with-token
+        gh release create ${release} --title ${release} --repo ${{ github.repository }} --notes "automated release" || echo "release already exists"
+
+        GITHUB_LINK=https://github.com/${GITHUB_REPOSITORY}/releases/download/${release}
+
+        if [[ -z "$(du --threshold=1950M ${{ steps.image-build.outputs.file-path }})" ]]; then
+          # iso is small enough to upload already
+          gh release upload ${release} --repo ${{ github.repository }} --clobber \
+            ${{ steps.upload-prepare.outputs.upload-files }}
+        else
+          # iso is too big - creating a split-zip
+          zip -j -s 1950m ${{ steps.image-build.outputs.file-path }}.zip ${{ steps.image-build.outputs.file-path }}
+          
+          REMOTE_FILES=$(find . -maxdepth 1 -name "*.z*" -exec basename {} \; | xargs -I{} echo "-w \"${GITHUB_LINK}/{}\"")
+          gh release upload ${release} --repo ${{ github.repository }} --clobber \
+            ./${{ steps.image-build.outputs.file-path }}+(.z*|.sha*|.pkgs|.sig|.torrent|.md5)
+        fi
