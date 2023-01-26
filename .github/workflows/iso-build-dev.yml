@@ -48,7 +48,7 @@ jobs:
         uses: UaiSO21/iso-build@main
         with:
           branch: ${{ matrix.branch }}
-          iso-profile: 'https://github.com/UaiSO21/uaiso-iso-profile'
+          iso-profile: 'https://github.com/UaiSO21/uaiso-iso-profile-plasma'
           
       - name: Push to Repo
         shell: bash
