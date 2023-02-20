@@ -26,7 +26,7 @@ runs:
     - name: ISO Build
       shell: bash
       run: |
-        git clone ${{ inputs.iso-profile-plasma }} -l iso-profile
+        git clone ${{ inputs.iso-profile-plasma }} -l iso-profile-plasma
         
         echo '
         [uaiso21-'"${{ inputs.branch }}"']
