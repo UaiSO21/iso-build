@@ -5,7 +5,7 @@ inputs:
     description: 'stable (default), testing, dev'
     required: false
     default: stable
-  uaiso-iso-profile-plasma:
+  iso-profile:
     description: 'iso profiles to clone'
     required: true
 
@@ -26,7 +26,7 @@ runs:
     - name: ISO Build
       shell: bash
       run: |
-        git clone ${{ inputs.uaiso-iso-profile-plasma }} -l uaiso-iso-profile-plasma
+        git clone ${{ inputs.iso-profile }} -l iso-profile
         
         echo '
         [uaiso21-'"${{ inputs.branch }}"']
