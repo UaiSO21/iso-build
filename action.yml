@@ -84,16 +84,17 @@ runs:
         
         cd out
         ISO=$(find . -type f -name "*.iso" | sed 's|.*/||')
+        ls -lha
 
         if [[ -z "$(du --threshold=1950M ${ISO})" ]]; then
           # iso is small enough to upload already
           gh release upload ${release} --repo ${{ github.repository }} --clobber \
-            ${{ steps.upload-prepare.outputs.upload-files }}
+            ${ISO}+(.z*|.sha*|.pkgs|.sig|.torrent|.md5)
         else
           # iso is too big - creating a split-zip
           zip -j -s 1950m ${ISO}.zip ${ISO}
           
           REMOTE_FILES=$(find . -maxdepth 1 -name "*.z*" -exec basename {} \; | xargs -I{} echo "-w \"${GITHUB_LINK}/{}\"")
           gh release upload ${release} --repo ${{ github.repository }} --clobber \
-            ./${{ steps.image-build.outputs.file-path }}+(.z*|.sha*|.pkgs|.sig|.torrent|.md5)
+            ./${ISO}+(.z*|.sha*|.pkgs|.sig|.torrent|.md5)
         fi
