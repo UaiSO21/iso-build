@@ -1,4 +1,4 @@
-name: ISO Build Stable
+name: ISO Build Dev PLASMA
 
 on:
   # repository_dispatch:
@@ -15,7 +15,7 @@ jobs:
       
     strategy:
       matrix:
-        BRANCH: [stable]
+        BRANCH: [dev]
 
     steps:
       - uses: actions/checkout@v3
@@ -78,4 +78,7 @@ jobs:
       # - name: Telegram Alert Fail
       #   if: ${{ failure() || cancelled() }}
       #   run: |
-      #     curl -X POST -H 'Content-Type: application/json' -d '{"chat_id": "${{ secrets.CHAT_ID }}", "text": "FALHA ao criar Pacote: ${{ github.event.action }} a partir do branch ${{ github.ref_name }}, link do erro: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}", "disable_notification": false}' ${{ secrets.MESSAGE_BOT_KEY }}
+      #     curl -X POST -H 'Content-Type: application/json' -d '{"chat_id": "${{ secrets.CHAT_ID }}", \
+      #"text": "FALHA ao criar Pacote: ${{ github.event.action }} a partir do branch ${{ github.ref_name }}, \
+      #link do erro: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}", \
+      #"disable_notification": false}' ${{ secrets.MESSAGE_BOT_KEY }}

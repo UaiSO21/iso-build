@@ -1,4 +1,4 @@
-name: ISO Build Testing
+name: ISO Build Testing PLASMA
 
 on:
   # repository_dispatch:
