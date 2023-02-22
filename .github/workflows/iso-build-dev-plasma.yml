@@ -1,89 +1,130 @@
+### NÃO EDITAR ###### NÃO EDITAR ###
 name: ISO Build Dev PLASMA
 
+### NÃO EDITAR ###
 on:
+  ### NÃO EDITAR ###
   # repository_dispatch:
+    ### NÃO EDITAR ###
     # types:
+    ### NÃO EDITAR ###
     #   - '*'
+    
+  ### NÃO EDITAR ###
   workflow_dispatch:
+  ### NÃO EDITAR ###
 
+### NÃO EDITAR ###
 jobs:
+  ### NÃO EDITAR ###
   build:
+    ### NÃO EDITAR ###### NÃO EDITAR ###
     runs-on: ubuntu-latest
+    ### NÃO EDITAR ###
     container: 
+      ### NÃO EDITAR ###
       image: archlinux:latest
+      ### NÃO EDITAR ###
       options: --privileged
       
+    ### NÃO EDITAR ###
     strategy:
+      ### NÃO EDITAR ###
       matrix:
+        ### NÃO EDITAR ###
         BRANCH: [dev]
-
+    
+    ### NÃO EDITAR ###
     steps:
+      ### NÃO EDITAR ###### NÃO EDITAR ###
       - uses: actions/checkout@v3
+      ### NÃO EDITAR ###### NÃO EDITAR ###
       - name: Install Dependencies
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         shell: bash -O extglob {0}
+        ### NÃO EDITAR ###
         run: |
+          ### NÃO EDITAR ###
           pacman-key --init
+          ### NÃO EDITAR ###
           
-          # #add BigLinux key
-          # pacman-key -r 45EC44879815E2A6
-          # pacman-key --lsign-key 45EC44879815E2A6
-          
-          # echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-          
-          # #add UaiSO21 key
-          # pacman-key -r FB39C5D54771F074
-          # pacman-key --lsign-key FB39C5D54771F074
-          
-          # echo '
-          # [uaiso21-dev]
-          # SigLevel = PackageRequired
-          # Server = http://repo-uaiso.uai21.com/dev/$arch' | tee -a /etc/pacman.conf
-          
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync
+          ### NÃO EDITAR ###### NÃO EDITAR ###
           pacman -Scc --noconfirm
-          
-          # cp archiso/pacman.conf /etc/pacman.conf
+          ### NÃO EDITAR ###### NÃO EDITAR ###
       
+      ### NÃO EDITAR ###
       - name: ISO Build
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         uses: UaiSO21/iso-build@main
+        ### NÃO EDITAR ###
         with:
+          ### NÃO EDITAR ###### NÃO EDITAR ###
           branch: ${{ matrix.branch }}
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           iso-profile: 'https://github.com/UaiSO21/uaiso-iso-profile-plasma'
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           
+      ### NÃO EDITAR ###
       - name: Push to Repo
+        ### NÃO EDITAR ###
         shell: bash
+        ### NÃO EDITAR ###
         run: |
+          ### NÃO EDITAR ###
           echo "## ssh setup ##"
+          ### NÃO EDITAR ###### NÃO EDITAR ###
           mkdir -p /home/runner/.ssh
+          ### NÃO EDITAR ###### NÃO EDITAR ###
           touch /home/runner/.ssh/id_rsa
+          ### NÃO EDITAR ###### NÃO EDITAR ###
           chmod 600 /home/runner/.ssh/id_rsa
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           # ssh-agent -a /tmp/ssh_agent.sock > /dev/null
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           echo "${{ secrets.REPO_SSH_KEY }}" >> /home/runner/.ssh/id_rsa
+          ### NÃO EDITAR ###
           eval `ssh-agent -s`
+          ### NÃO EDITAR ###### NÃO EDITAR ###
           ssh-add /home/runner/.ssh/id_rsa
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           ssh-keyscan -t rsa -p ${{ secrets.REPO_PORT }} ${{ secrets.REPO_HOST }} >> /home/runner/.ssh/known_hosts
           
+          ### NÃO EDITAR ###
           cd out
+          ### NÃO EDITAR ###
           ls -lh
+          ### NÃO EDITAR ###
           
+          ### NÃO EDITAR ###
           for i in *.iso *.md5; do
+            ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
             rsync -vapzO -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.REPO_PORT }}" $i ${{ secrets.REPO_USER }}@${{ secrets.REPO_HOST }}:${{ secrets.REPO_DIR_ISO }}
+            ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
+          ### NÃO EDITAR ###
           done
           
       # # # Tmate ##
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       
+      ### NÃO EDITAR ###### NÃO EDITAR ###
       - name: Telegram Alert Success
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         shell: bash -O extglob {0}
+        ### NÃO EDITAR ###
         run: |
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           curl -X POST -H 'Content-Type: application/json' -d '{"chat_id": "${{ secrets.CHAT_ID }}", "text": "ISO: ${{ github.workflow }} Criada com Sucesso.", "disable_notification": "true", "message_thread_id": "6"}' ${{ secrets.MESSAGE_BOT_KEY }}
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           
+      ### NÃO EDITAR ###### NÃO EDITAR ###
       - name: Telegram Alerta Fail
-        # if: ${{ failure() || cancelled() }}
+        ### NÃO EDITAR ###
         if: ${{ failure() }}
+        ### NÃO EDITAR ###
         run: |
-          #echo ${{ github.token }} | gh auth login --with-token
-          #gh release delete ${{ needs.prepare-release.outputs.release_tag }} -y --repo ${{ github.repository }}
-          
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           curl -X POST -H 'Content-Type: application/json' -d '{"chat_id": "${{ secrets.CHAT_ID }}", "text": "Falha ao gerar ISO  ${{ github.workflow }} link https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}", "disable_notification": "false", "disable_web_page_preview": "true" "message_thread_id": "6"}' ${{ secrets.MESSAGE_BOT_KEY }}
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###

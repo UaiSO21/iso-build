@@ -1,100 +1,190 @@
+### NÃO EDITAR ###### NÃO EDITAR ###
 name: 'UaiSO21 Iso Action'
 
+### NÃO EDITAR ###
 inputs:
+  ### NÃO EDITAR ###
   branch: 
+    ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
     description: 'stable (default), testing, dev'
+    ### NÃO EDITAR ###
     required: false
+    ### NÃO EDITAR ###
     default: stable
+  ### NÃO EDITAR ###
   iso-profile:
+    ### NÃO EDITAR ###### NÃO EDITAR ###
     description: 'iso profiles to clone'
+    ### NÃO EDITAR ###
     required: true
+    ### NÃO EDITAR ###
 
+### NÃO EDITAR ###
 runs:
+  ### NÃO EDITAR ###
   using: "composite"
+  ### NÃO EDITAR ###
   steps:
-  
+    ### NÃO EDITAR ###### NÃO EDITAR ###
     - id: install-build-dependencies
+      ### NÃO EDITAR ###
       shell: bash
+      ### NÃO EDITAR ###
       run: |
+        ### NÃO EDITAR ###
         pacman-key --init
+        ### NÃO EDITAR ###
         #add UaiSO21 key
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         pacman-key -r FB39C5D54771F074
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         pacman-key --lsign-key FB39C5D54771F074
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync git github-cli zip
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         pacman -Scc --noconfirm
+        ### NÃO EDITAR ###
         
+    ### NÃO EDITAR ###
     - name: ISO Build
+      ### NÃO EDITAR ###
       shell: bash
+      ### NÃO EDITAR ###
       run: |
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         git clone ${{ inputs.iso-profile }} -l iso-profile
+        ### NÃO EDITAR ###
         
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         echo '
         [uaiso21-'"${{ inputs.branch }}"']
         SigLevel = PackageRequired
         Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch' | tee -a iso-profile/airootfs/etc/pacman.conf
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         cat iso-profile/airootfs/etc/pacman.conf
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         echo '
         [uaiso21-'"${{ inputs.branch }}"']
         SigLevel = PackageRequired
         Server = http://repo-uaiso.uai21.com/${{ inputs.branch }}/$arch' | tee -a iso-profile/pacman.conf
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         cat iso-profile/pacman.conf
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         if [ "${{ inputs.branch }}" != "stable" ];then
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           sed -i '/iso_version/s/"/-${{ inputs.branch }}"/2' iso-profile/profiledef.sh
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           sed -i "/airootfs_image_tool_options/s/=.*/=('-comp' 'zstd' '-Xcompression-level' '1' '-b' '1M')/" iso-profile/profiledef.sh
+        ### NÃO EDITAR ###
         fi
+        ### NÃO EDITAR ###
         
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         cat iso-profile/profiledef.sh
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         mkarchiso -v iso-profile
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         
+    ### NÃO EDITAR ###
     - name: CheckSum
+      ### NÃO EDITAR ###### NÃO EDITAR ###
       shell: bash -O extglob {0}
+      ### NÃO EDITAR ###
       run: |
+        ### NÃO EDITAR ###
         # "Checksum"
+        ### NÃO EDITAR ###
         cd out
+        ### NÃO EDITAR ###
         echo '#!/bin/bash
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         for i in *.iso; do md5sum $i >> $i.md5; done
+        ### NÃO EDITAR ###
         exit 0' > md5.sh
+        ### NÃO EDITAR ###
         bash md5.sh
+        ### NÃO EDITAR ###
         rm md5.sh
+        ### NÃO EDITAR ###
     
+    ### NÃO EDITAR ###
     - id: upload-prepare
+      ### NÃO EDITAR ###### NÃO EDITAR ###
       shell: bash -O extglob {0}
+      ### NÃO EDITAR ###
       run: |
+        ### NÃO EDITAR ###
         echo "## ssh setup"
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         mkdir -p /home/runner/.ssh
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         touch /home/runner/.ssh/github_actions
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         chmod 600 /home/runner/.ssh/github_actions
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         ssh-agent -a /tmp/ssh_agent.sock > /dev/null
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         
+    ### NÃO EDITAR ###### NÃO EDITAR ###
     - id: upload-github-release
+      ### NÃO EDITAR ###### NÃO EDITAR ###
       shell: bash -O extglob {0}
+      ### NÃO EDITAR ###
       run: |
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         echo "## github upload"
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         release=$(date +%Y-%m-%d)
-
-        echo ${{ github.token }} | gh auth login --with-token
-        gh release create ${release} --title ${release} --repo ${{ github.repository }} --notes "automated release" || echo "release already exists"
-
-        GITHUB_LINK=https://github.com/${GITHUB_REPOSITORY}/releases/download/${release}
+        ### NÃO EDITAR ###### NÃO EDITAR ###
         
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
+        echo ${{ github.token }} | gh auth login --with-token
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
+        gh release create ${release} --title ${release} --repo ${{ github.repository }} --notes "automated release" || echo "release already exists"
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
+        
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
+        GITHUB_LINK=https://github.com/${GITHUB_REPOSITORY}/releases/download/${release}
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
+        
+        ### NÃO EDITAR ###
         cd out
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         ISO=$(find . -type f -name "*.iso" | sed 's|.*/||')
+        ### NÃO EDITAR ###
         ls -lha
-
+        ### NÃO EDITAR ###
+        
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         if [[ -z "$(du --threshold=1950M ${ISO})" ]]; then
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           # iso is small enough to upload already
-          gh release upload ${release} --repo ${{ github.repository }} --clobber \
-            ${ISO}+(.z*|.sha*|.pkgs|.sig|.torrent|.md5)
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
+          gh release upload ${release} --repo ${{ github.repository }} --clobber ${ISO}+(.z*|.sha*|.pkgs|.sig|.torrent|.md5)
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
+            
+        ### NÃO EDITAR ###
         else
+          ### NÃO EDITAR ###### NÃO EDITAR ###
           # iso is too big - creating a split-zip
+          ### NÃO EDITAR ###### NÃO EDITAR ###
           zip -j -s 1950m ${ISO}.zip ${ISO}
+          ### NÃO EDITAR ###### NÃO EDITAR ###
           
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           REMOTE_FILES=$(find . -maxdepth 1 -name "*.z*" -exec basename {} \; | xargs -I{} echo "-w \"${GITHUB_LINK}/{}\"")
-          gh release upload ${release} --repo ${{ github.repository }} --clobber \
-            ./${ISO}+(.z*|.sha*|.pkgs|.sig|.torrent|.md5)
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
+          gh release upload ${release} --repo ${{ github.repository }} --clobber ./${ISO}+(.z*|.sha*|.pkgs|.sig|.torrent|.md5)
+          ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         fi
+        ### NÃO EDITAR ###
