@@ -75,10 +75,16 @@ jobs:
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       
-      # - name: Telegram Alert Fail
-      #   if: ${{ failure() || cancelled() }}
-      #   run: |
-      #     curl -X POST -H 'Content-Type: application/json' -d '{"chat_id": "${{ secrets.CHAT_ID }}", \
-      #"text": "FALHA ao criar Pacote: ${{ github.event.action }} a partir do branch ${{ github.ref_name }}, \
-      #link do erro: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}", \
-      #"disable_notification": false}' ${{ secrets.MESSAGE_BOT_KEY }}
+      - name: Telegram Alert Success
+        shell: bash -O extglob {0}
+        run: |
+          curl -X POST -H 'Content-Type: application/json' -d '{"chat_id": "${{ secrets.CHAT_ID }}", "text": "ISO: ${{ github.workflow }} Criada com Sucesso.", "disable_notification": "true", "message_thread_id": "6"}' ${{ secrets.MESSAGE_BOT_KEY }}
+          
+      - name: Telegram Alerta Fail
+        # if: ${{ failure() || cancelled() }}
+        if: ${{ failure() }}
+        run: |
+          #echo ${{ github.token }} | gh auth login --with-token
+          #gh release delete ${{ needs.prepare-release.outputs.release_tag }} -y --repo ${{ github.repository }}
+          
+          curl -X POST -H 'Content-Type: application/json' -d '{"chat_id": "${{ secrets.CHAT_ID }}", "text": "Falha ao gerar ISO  ${{ github.workflow }} link https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}", "disable_notification": "false", "disable_web_page_preview": "true" "message_thread_id": "6"}' ${{ secrets.MESSAGE_BOT_KEY }}
