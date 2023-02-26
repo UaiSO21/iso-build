@@ -180,11 +180,11 @@ runs:
           ### NÃO EDITAR ###### NÃO EDITAR ###
           zip -j -s 1950m ${ISO}.zip ${ISO}
           ### NÃO EDITAR ###### NÃO EDITAR ###
-          
+          ls -lha
           ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
-          REMOTE_FILES=$(find . -maxdepth 1 -name "*.z*" -exec basename {} \; | xargs -I{} echo "-w \"${GITHUB_LINK}/{}\"")
+          #REMOTE_FILES=$(find . -maxdepth 1 -name "*.z*" -exec basename {} \; | xargs -I{} echo "-w \"${GITHUB_LINK}/{}\"")
           ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
-          gh release upload ${release} --repo ${{ github.repository }} --clobber ./${ISO}+(.z*|.sha*|.pkgs|.sig|.torrent|.md5)
+          gh release upload ${release} --repo ${{ github.repository }} --clobber ./${ISO}+(.z*|.md5)
           ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
         fi
         ### NÃO EDITAR ###
