@@ -45,6 +45,10 @@ runs:
         pacman -Scc --noconfirm
         ### NÃO EDITAR ###
         
+    # # Tmate ##
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+        
     ### NÃO EDITAR ###
     - name: ISO Build
       ### NÃO EDITAR ###
