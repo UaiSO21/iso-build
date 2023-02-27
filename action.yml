@@ -26,28 +26,24 @@ runs:
   ### NÃO EDITAR ###
   steps:
     ### NÃO EDITAR ###### NÃO EDITAR ###
-    # - id: install-build-dependencies
-    #   ### NÃO EDITAR ###
-    #   shell: bash
-    #   ### NÃO EDITAR ###
-    #   run: |
-    #     ### NÃO EDITAR ###
-    #     pacman-key --init
-    #     ### NÃO EDITAR ###
-    #     #add UaiSO21 key
-    #     ### NÃO EDITAR ###### NÃO EDITAR ###
-    #     pacman-key -r FB39C5D54771F074
-    #     ### NÃO EDITAR ###### NÃO EDITAR ###
-    #     pacman-key --lsign-key FB39C5D54771F074
-    #     ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
-    #     pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync git github-cli zip
-    #     ### NÃO EDITAR ###### NÃO EDITAR ###
-    #     pacman -Scc --noconfirm
-    #     ### NÃO EDITAR ###
-        
-    # # Tmate ##
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+    - id: install-build-dependencies
+      ### NÃO EDITAR ###
+      shell: bash
+      ### NÃO EDITAR ###
+      run: |
+        ### NÃO EDITAR ###
+        pacman-key --init
+        ### NÃO EDITAR ###
+        #add UaiSO21 key
+        ### NÃO EDITAR ###### NÃO EDITAR ###
+        pacman-key -r FB39C5D54771F074
+        ### NÃO EDITAR ###### NÃO EDITAR ###
+        pacman-key --lsign-key FB39C5D54771F074
+        ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
+        pacman -Syu --noconfirm --needed archiso sudo nano openssh rsync git github-cli zip
+        ### NÃO EDITAR ###### NÃO EDITAR ###
+        pacman -Scc --noconfirm
+        ### NÃO EDITAR ###
         
     ### NÃO EDITAR ###
     - name: ISO Build
