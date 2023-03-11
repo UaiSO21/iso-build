@@ -170,7 +170,7 @@ runs:
           ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
           # iso is small enough to upload already
           ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
-          gh release upload ${release} --repo ${{ github.repository }} --clobber ${ISO}+(.iso|.pkgs|.md5)
+          gh release upload ${release} --repo ${{ github.repository }} --clobber ./${ISO}+(.iso|.pkgs|.md5)
           ### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###### NÃO EDITAR ###
             
         ### NÃO EDITAR ###
